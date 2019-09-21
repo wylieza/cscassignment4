@@ -77,7 +77,7 @@ public class WordApp {
 			public void actionPerformed(ActionEvent evt) {
 				String text = textEntry.getText();
 				//[snip]
-				for (int i = 0; i < words.length; i++){
+				for (int i = 0; i < words.length && live; i++){
 					if (words[i].matchWord(text)){
 						score.caughtWord(text.length());
 						if(wordsLeft.getAndDecrement() <= noWords){ //Check for OB1E
@@ -108,9 +108,15 @@ public class WordApp {
 			public void actionPerformed(ActionEvent e)
 			{
 				//[snip]
-				System.out.println("Start Button Pressed");							//testing
-				words[0].setPos(words[0].getX(), words[0].getY()+1);
-				w.repaint();
+				System.out.println("Start Button Pressed");							//testing START
+				if(!live){
+					live = true;
+					tracker.start();
+					for (int i=0;i<noWords;i++) {
+						words[i].setEnabled(true); //Prevent cheating
+						animators[i].start();
+					}
+				}
 
 				textEntry.requestFocus();  //return focus to the text entry field
 			}
@@ -195,7 +201,7 @@ public static String[] getDictFromFile(String filename) {
 		animators = new Animator[noWords];
 		
 		//[snip]
-		live = true; //Set the game to running state
+		live = false; //Set the game to not running until start pressed
 
 		setupGUI(frameX, frameY, yLimit);  
 		//Start WordPanel thread - for redrawing animation
@@ -203,15 +209,15 @@ public static String[] getDictFromFile(String filename) {
 		int x_inc=(int)frameX/noWords;
 		//initialize shared array of current words
 
+		wordsLeft = new AtomicInteger(totalWords);
+
 		for (int i=0;i<noWords;i++) {
 			words[i]=new WordRecord(dict.getNewWord(),i*x_inc,yLimit);
 			animators[i] = new Animator(words[i], w, score);
-			animators[i].start();
 		}
-		wordsLeft = new AtomicInteger(totalWords);
-		//wordsLeft.set(noWords);
+		
 		tracker = new Tracker(w, score);
-		tracker.start();	
+			
 
 	}
 

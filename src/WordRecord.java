@@ -22,7 +22,7 @@ public class WordRecord {
 		y=0;	
 		maxY=300;
 		dropped=false;
-		enabled = true;
+		enabled = false;
 		fallingSpeed=(int)(Math.random() * (maxWait-minWait)+minWait); 
 	}
 	
