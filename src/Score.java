@@ -3,7 +3,7 @@ public class Score {
 	private int caughtWords;
 	private int gameScore;
 	
-	Score() {
+	Score() { 
 		missedWords=0;
 		caughtWords=0;
 		gameScore=0;

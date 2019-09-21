@@ -6,6 +6,7 @@ public class WordRecord {
 	private int y;
 	private int maxY;
 	private boolean dropped;
+	private boolean enabled;
 	
 	private int fallingSpeed;
 	private static int maxWait=1500;
@@ -21,6 +22,7 @@ public class WordRecord {
 		y=0;	
 		maxY=300;
 		dropped=false;
+		enabled = true;
 		fallingSpeed=(int)(Math.random() * (maxWait-minWait)+minWait); 
 	}
 	
@@ -87,7 +89,7 @@ public class WordRecord {
 	
 	public synchronized boolean matchWord(String typedText) {
 		//System.out.println("Matching against: "+text);
-		if (typedText.equals(this.text)) {
+		if (typedText.equals(this.text) && !dropped) {
 			resetWord();
 			return true;
 		}
@@ -102,6 +104,19 @@ public class WordRecord {
 	
 	public synchronized  boolean dropped() {
 		return dropped;
+	}
+
+	public synchronized boolean enabled(){
+		return enabled;
+	}
+
+	public synchronized void setEnabled(boolean enable){
+		enabled = enable;
+	}
+
+	public synchronized void destroy(){
+		enabled = false;
+		y = 0;
 	}
 
 }

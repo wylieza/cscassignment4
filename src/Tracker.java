@@ -32,6 +32,10 @@ public class Tracker extends Thread{
                 System.out.println("Current Score " + lastGameScore);
                 w.repaint();
             }
+
+            if (WordApp.wordsLeft.get() == 0){
+                System.out.println("Tracker end game here");
+            }
         }
         //End of game procedure...?
     }
