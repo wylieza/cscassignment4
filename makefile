@@ -8,21 +8,17 @@ DOCDIR=./doc
 ${BINDIR}/%.class: ${SRCDIR}/%.java
 	javac $< -cp ${BINDIR} -d ${BINDIR} 
 
-all: ${BINDIR}/CloudDataApp.class
+all: ${BINDIR}/WordApp.class
 
-${BINDIR}/CloudDataApp.class: ${BINDIR}/CloudData.class ${BINDIR}/Vector.class ${BINDIR}/ParCompute.class ${BINDIR}/SeqCompute.class
+${BINDIR}/WordApp.class: ${BINDIR}/Score.class ${BINDIR}/WordDictionary.class ${BINDIR}/WordPanel.class ${BINDIR}/WordRecord.class ${BINDIR}/Animator.class ${BINDIR}/Tracker.class
 
-${BINDIR}/CloudData.class: ${BINDIR}/Vector.class
-
-${BINDIR}/ParCompute.class: ${BINDIR}/CloudData.class ${BINDIR}/SeqCompute.class
-
-${BINDIR}/SeqCompute.class: ${BINDIR}/CloudData.class
+${BINDIR}/WordPanel.class: ${BINDIR}/WordRecord.class
 
 clean:
 	rm -f ${BINDIR}/*.class
 
 run:
-	@java -cp ./bin CloudDataApp ${args}
+	@java -cp ./bin WordApp ${args}
 
 docs:
 	javadoc  -classpath ${BINDIR} -d ${DOCDIR} ${SRCDIR}/*.java
