@@ -14,6 +14,7 @@ public class Animator extends Thread{
     public void run(){
         baseTime = System.currentTimeMillis();
         while(!wr.dropped() && wr.enabled()){
+            while(!WordApp.live);
             if(wr.getSpeed()/20 <= (System.currentTimeMillis()-baseTime)){
             //if(wr.getSpeed()/20 <= (System.currentTimeMillis()-baseTime)){
                 baseTime = System.currentTimeMillis();

@@ -129,12 +129,27 @@ public class WordApp {
 				public void actionPerformed(ActionEvent e)
 				{
 					//[snip]
+					live = false;
+					for
 					System.out.println("End button pressed, 'halt the game'"); 									//testing
 				}
 				});
+
+		JButton quitB = new JButton("Quit");;
+	
+		// add the listener to the jbutton to handle the "pressed" event
+		quitB.addActionListener(new ActionListener()
+		{
+		public void actionPerformed(ActionEvent e)
+		{			
+			System.out.println("End button pressed, 'QUIT the game'");
+			System.exit(0);
+		}
+		});
 		
 		b.add(startB);
 		b.add(endB);
+		b.add(quitB);
 		
 		g.add(b);
 		
