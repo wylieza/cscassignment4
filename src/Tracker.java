@@ -61,6 +61,8 @@ public class Tracker extends Thread{
                 showCompletedMessage = true;
                 break;
             }
+
+            yield();
         }
         w.repaint();
         //End of game procedure... Was 'END' button pressed or did all words fall?
