@@ -10,7 +10,7 @@ ${BINDIR}/%.class: ${SRCDIR}/%.java
 
 all: ${BINDIR}/WordApp.class
 
-${BINDIR}/WordApp.class: ${BINDIR}/Score.class ${BINDIR}/WordDictionary.class ${BINDIR}/WordPanel.class ${BINDIR}/WordRecord.class ${BINDIR}/Animator.class ${BINDIR}/Tracker.class
+${BINDIR}/WordApp.class: ${BINDIR}/Score.class ${BINDIR}/WordDictionary.class ${BINDIR}/WordPanel.class ${BINDIR}/WordRecord.class ${BINDIR}/Tracker.class ${BINDIR}/Animator.class
 
 ${BINDIR}/WordPanel.class: ${BINDIR}/WordRecord.class
 
