@@ -29,7 +29,10 @@ public class WordApp {
 	static volatile boolean done;  //must be volatile
 	static 	Score score = new Score();
 
-	static volatile boolean live; //Boolean to say if game is running
+	static volatile boolean live; //Boolean to say if game is in 'running' state
+	/*Running state is activated after the start button is pressed
+	* Running state is deactivated when END button is pressed?
+	*/
 	static AtomicInteger wordsLeft;
 
 	static WordPanel w;
@@ -110,10 +113,23 @@ public class WordApp {
 				//[snip]
 				System.out.println("Start Button Pressed");							//testing START
 				if(!live){
-					live = true;
+
+					//Reinit state
+					score.resetScore();
+					wordsLeft = new AtomicInteger(totalWords);
+
+					for (int i=0;i<words.length;i++) {
+						words[i].resetWord();
+						animators[i] = new Animator(words[i], w, score);
+					}
+					
+					tracker = new Tracker(w, score);
+
+					//Start up threads
+					live = true; //Must be set to true before starting threads
 					tracker.start();
 					for (int i=0;i<noWords;i++) {
-						words[i].setEnabled(true); //Prevent cheating
+						words[i].setEnabled(true); //Enable guessing of word
 						animators[i].start();
 					}
 				}
@@ -129,9 +145,12 @@ public class WordApp {
 				public void actionPerformed(ActionEvent e)
 				{
 					//[snip]
-					live = false;
-					for
-					System.out.println("End button pressed, 'halt the game'"); 									//testing
+					if(live){
+						live = false;
+						System.out.println("End button pressed, game ended"); 	
+					}else{
+						System.out.println("No game to end!");
+					}
 				}
 				});
 
@@ -206,8 +225,8 @@ public static String[] getDictFromFile(String filename) {
 			if (tmpDict!=null)
 				dict= new WordDictionary(tmpDict);
 		}else{
-			totalWords = 20;
-			noWords = 5;
+			totalWords = 10;
+			noWords = 4;
 		}
 		
 		WordRecord.dict=dict; //set the class dictionary for the words.
@@ -224,14 +243,9 @@ public static String[] getDictFromFile(String filename) {
 		int x_inc=(int)frameX/noWords;
 		//initialize shared array of current words
 
-		wordsLeft = new AtomicInteger(totalWords);
-
 		for (int i=0;i<noWords;i++) {
 			words[i]=new WordRecord(dict.getNewWord(),i*x_inc,yLimit);
-			animators[i] = new Animator(words[i], w, score);
 		}
-		
-		tracker = new Tracker(w, score);
 			
 
 	}

@@ -6,7 +6,7 @@ public class WordRecord {
 	private int y;
 	private int maxY;
 	private boolean dropped;
-	private boolean enabled;
+	private boolean enabled; //Prevent cheating by having an enabled flag. Guesses will only on 'enabled' words
 	
 	private int fallingSpeed;
 	private static int maxWait=1500;

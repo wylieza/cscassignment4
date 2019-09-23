@@ -14,9 +14,10 @@ public class Animator extends Thread{
     public void run(){
         baseTime = System.currentTimeMillis();
         while(!wr.dropped() && wr.enabled()){
-            while(!WordApp.live);
-            if(wr.getSpeed()/20 <= (System.currentTimeMillis()-baseTime)){
-            //if(wr.getSpeed()/20 <= (System.currentTimeMillis()-baseTime)){
+            if(!WordApp.live){
+                break; //Game ended by user, kill thread
+            }
+            if(wr.getSpeed()/30 <= (System.currentTimeMillis()-baseTime)){ //use 20 for good speed
                 baseTime = System.currentTimeMillis();
                 wr.setY(wr.getY()+1);
                 w.repaint();
@@ -29,15 +30,13 @@ public class Animator extends Thread{
         }
 
         //TODO: Syncronize this
-        if(WordApp.wordsLeft.get() >= WordApp.noWords){
+        if(WordApp.wordsLeft.get() >= WordApp.noWords && WordApp.live){
             wr.resetWord();
             this.run();       
         }else{
             wr.destroy();
-            if (WordApp.wordsLeft.get() == 0){
-                //END Game
-                System.out.println("Game over");
-            }
+            //Tracker will track when all words destroyed and end the game when nesesseary
         }
+        System.out.println("Animator killed");
     }
 }
