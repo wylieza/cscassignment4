@@ -83,7 +83,7 @@ public class WordApp {
 				for (int i = 0; i < words.length && live; i++){
 					if (words[i].matchWord(text)){
 						score.caughtWord(text.length());
-						if(wordsLeft.getAndDecrement() <= noWords){ //Check for OB1E
+						if(wordsLeft.getAndDecrement() <= noWords){
 							words[i].destroy();
 						}
 						break; //Only match the first if two of same on display

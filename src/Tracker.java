@@ -1,3 +1,5 @@
+import javax.swing.JOptionPane;
+
 //Seperated from the 'score' class so as to comply with MVC design
 
 public class Tracker extends Thread{
@@ -11,6 +13,9 @@ public class Tracker extends Thread{
     private int latestGameScore;
     private int wordsLeft;
 
+    private int framesPerSec;
+    private long lastTime;
+
     private boolean showCompletedMessage;
 
     WordPanel w;
@@ -20,6 +25,9 @@ public class Tracker extends Thread{
         this.w = w;
         this.s = s;
         showCompletedMessage = false;
+
+        framesPerSec = 30;
+        lastTime = System.currentTimeMillis();
 
         //Set last values to force update after game restart event
         lastMissedWords = -1;
@@ -62,12 +70,16 @@ public class Tracker extends Thread{
                 break;
             }
 
-            yield();
+            if((System.currentTimeMillis()-lastTime) > 1000/framesPerSec){
+                w.repaint();
+                lastTime = System.currentTimeMillis();
+            }
+
         }
         w.repaint();
         //End of game procedure... Was 'END' button pressed or did all words fall?
         if(showCompletedMessage){
-            System.out.println("Nice Work!\nMissed Words: " + lastMissedWords + "\nCaught Words: " + lastCaughtWords + "\nScore: " + lastGameScore);
+            JOptionPane.showMessageDialog(null, "Nice Work!\nMissed Words: " + lastMissedWords + "\nCaught Words: " + lastCaughtWords + "\nScore: " + lastGameScore);
         }else{
             System.out.println("Game ended by user!");
         }

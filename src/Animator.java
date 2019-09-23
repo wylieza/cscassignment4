@@ -1,5 +1,8 @@
+import java.util.concurrent.atomic.*;
+
 public class Animator extends Thread{
 
+    //public static AtomicBoolean repaintBusy; //Only call repaint if no other processes are currently refreshing
     WordPanel w;
     WordRecord wr;
     Score s;
@@ -11,6 +14,8 @@ public class Animator extends Thread{
         this.wr = wr;
         this.s = s;
         speedDivisor = 10;
+        //repaintBusy = new AtomicBoolean(false);
+
         System.out.println("Animator created");
     }
 
@@ -26,7 +31,11 @@ public class Animator extends Thread{
             if(wr.getSpeed()/speedDivisor <= (System.currentTimeMillis()-baseTime)){ //use 20 for good speed
                 baseTime = System.currentTimeMillis();
                 wr.setY(wr.getY()+1);
-                w.repaint();
+                //if(repaintBusy.compareAndSet(false, true)){
+                //w.repaint(); //Consider doing this in the track (like an FPS vibe?) -MUCH BETTER!!!!
+                //    repaintBusy.set(false);
+                //}
+                
             }            
 
             /*
