@@ -184,8 +184,8 @@ public static String[] getDictFromFile(String filename) {
 			if (tmpDict!=null)
 				dict= new WordDictionary(tmpDict);
 		}else{
-			totalWords = 10000000;
-			noWords = 100;
+			totalWords = 20;
+			noWords = 5;
 		}
 		
 		WordRecord.dict=dict; //set the class dictionary for the words.

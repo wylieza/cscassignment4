@@ -55,7 +55,7 @@ public class Tracker extends Thread{
 
             //Update based on the coherent data
 
-            if (lastWordsLeft == 0){ //Check if the number of words left is zero
+            if (lastWordsLeft <= 0){ //Check if the number of words left is zero
                 System.out.println("All words finnished falling");
                 showCompletedMessage = true;
                 //Dont break here, but allow one last sweep through to perform final updates
@@ -64,7 +64,7 @@ public class Tracker extends Thread{
             if(lastMissedWords < latestMissedWords){
                 lastMissedWords = latestMissedWords; //This must happend before the update and then the update must happen on the local variable so we don't 'miss' a score
                 WordApp.updateMissed("Missed:" + lastMissedWords + "    ");
-                System.out.println("Update missed Word counter diplay!");
+                //System.out.println("Update missed Word counter diplay!");
                 w.repaint();
             }
             if(lastCaughtWords < latestCaughtWords){
