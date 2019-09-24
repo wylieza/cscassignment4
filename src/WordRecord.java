@@ -34,19 +34,6 @@ public class WordRecord {
 		this.x=x;
 		this.maxY=maxY;
 	}
-	
-// all getters and setters must be synchronized
-
-	/*
-	public synchronized void setY(int y) {
-		if (y>maxY) {
-			y=maxY;
-			dropped=true;
-		}
-		this.y=y;
-	}
-	*/
-
 
 	public synchronized boolean setY(int y) { //Modified
 		if (y>maxY) {
