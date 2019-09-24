@@ -64,7 +64,6 @@ public class WordPanel extends JPanel implements Runnable {
 
 			tracker.start(); //Start the game tracker
 			for (int i=0;i<noWords;i++) {
-				words[i].setEnabled(true); //Enable guessing of word
 				animators[i].start(); //Start the word animation
 			}
 		}

@@ -22,25 +22,19 @@ public class Animator extends Thread{
     public void run(){
         
         baseTime = System.currentTimeMillis();
-        while(!wr.dropped() && wr.enabled()){
+        while(!wr.dropped()){
             if(!Tracker.live){
                 break; //Game ended by user, kill thread
             }
 
-            if(wr.getSpeed()/speedDivisor <= (System.currentTimeMillis()-baseTime)){ //use 20 for good speed
+            if(wr.getSpeed()/speedDivisor <= (System.currentTimeMillis()-baseTime)){ //Check if it is time to increment y position
                 baseTime = System.currentTimeMillis();
-                if(wr.setY(wr.getY()+1)){ //Returns if word is dropped or not
+                if(wr.setY(wr.getY()+1)){ //Returns if word is dropped or not [Setting and checking if the word has dropped must be synchonized, else case: word caught and then destroyed, then anim. scans...will result in counting a miss CONFIRMED]
                     s.missedWord();
                     Tracker.wordsLeft.getAndDecrement();
-                    //break; //If the word was dropped we must break - NOT Actually nesessary?
                 }                
             }                        
         }
-
-        //if(wr.enabled()){
-        //    s.missedWord();
-        //    Tracker.wordsLeft.getAndDecrement();
-        //}
 
         //TODO: Syncronize this
         if(Tracker.wordsLeft.get() >= WordApp.noWords && Tracker.live){

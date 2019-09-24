@@ -6,7 +6,6 @@ public class WordRecord {
 	private int y;
 	private int maxY;
 	private boolean dropped;
-	private boolean enabled; //Prevent cheating by having an enabled flag. Guesses will only on 'enabled' words
 	
 	private int fallingSpeed;
 	private static int maxWait=1500;
@@ -22,7 +21,6 @@ public class WordRecord {
 		y=0;	
 		maxY=300;
 		dropped=false;
-		enabled = false;
 		fallingSpeed=(int)(Math.random() * (maxWait-minWait)+minWait); 
 	}
 	
@@ -50,7 +48,7 @@ public class WordRecord {
 	*/
 
 
-	public synchronized boolean setY(int y) {
+	public synchronized boolean setY(int y) { //Modified
 		if (y>maxY) {
 			y=maxY;
 			dropped=true;
@@ -116,16 +114,7 @@ public class WordRecord {
 		return dropped;
 	}
 
-	public synchronized boolean enabled(){
-		return enabled;
-	}
-
-	public synchronized void setEnabled(boolean enable){
-		enabled = enable;
-	}
-
 	public synchronized void destroy(){
-		enabled = false;
 		dropped = true;
 		y = 0;
 	}

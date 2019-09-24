@@ -15,10 +15,10 @@ public class Tracker extends Thread{
 
     static volatile boolean live; //Boolean to say if game is in 'running' state //MOVE TO TRACKER
 	/*Running state is activated after the start button is pressed
-	* Running state is deactivated when END button is pressed?
-	*/
+	* Running state is deactivated when END button is pressed?	*/
 
     public static AtomicInteger wordsLeft; //MOVE TO TRACKER
+    private int lastWordsLeft;
 
     private int framesPerSec;
     private long lastTime;
@@ -46,13 +46,16 @@ public class Tracker extends Thread{
         while(live){
 
             //Synchonize these lines:
-            latestMissedWords = s.getMissed();
-	        latestCaughtWords = s.getCaught();
-            latestGameScore = s.getScore();
+            do while(wordsLeft.get() != lastWordsLeft){ //Loop through until sure of a coherent set of results
+                lastWordsLeft = wordsLeft.get();
+                latestMissedWords = s.getMissed();
+                latestCaughtWords = s.getCaught();
+                latestGameScore = s.getScore();
+            }
 
             //Update based on the coherent data
 
-            if (wordsLeft.get() == 0){ //Check if the number of words left is zero
+            if (lastWordsLeft == 0){ //Check if the number of words left is zero
                 System.out.println("All words finnished falling");
                 showCompletedMessage = true;
                 //Dont break here, but allow one last sweep through to perform final updates
