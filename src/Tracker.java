@@ -1,4 +1,3 @@
-import javax.swing.JOptionPane;
 import java.util.concurrent.atomic.AtomicInteger;
 
 //Seperated from the 'score' class so as to comply with MVC design
