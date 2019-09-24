@@ -46,12 +46,12 @@ public class Tracker extends Thread{
         while(live){
 
             //Synchonize these lines:
-            do while(wordsLeft.get() != lastWordsLeft){ //Loop through until sure of a coherent set of results
+            do { //Loop through until sure of a coherent set of results
                 lastWordsLeft = wordsLeft.get();
                 latestMissedWords = s.getMissed();
                 latestCaughtWords = s.getCaught();
                 latestGameScore = s.getScore();
-            }
+            }while(wordsLeft.get() != lastWordsLeft);
 
             //Update based on the coherent data
 

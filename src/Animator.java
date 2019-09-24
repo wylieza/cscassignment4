@@ -2,7 +2,6 @@ import java.util.concurrent.atomic.*;
 
 public class Animator extends Thread{
 
-    //public static AtomicBoolean repaintBusy; //Only call repaint if no other processes are currently refreshing
     WordPanel w;
     WordRecord wr;
     Score s;
@@ -13,8 +12,7 @@ public class Animator extends Thread{
         this.w = w;
         this.wr = wr;
         this.s = s;
-        speedDivisor = 10;
-        //repaintBusy = new AtomicBoolean(false);
+        speedDivisor = 100;
 
         System.out.println("Animator created");
     }
@@ -27,7 +25,7 @@ public class Animator extends Thread{
                 break; //Game ended by user, kill thread
             }
 
-            if(wr.getSpeed()/speedDivisor <= (System.currentTimeMillis()-baseTime)){ //Check if it is time to increment y position
+            if(true || wr.getSpeed()/speedDivisor <= (System.currentTimeMillis()-baseTime)){ //Check if it is time to increment y position
                 baseTime = System.currentTimeMillis();
                 if(wr.setY(wr.getY()+1)){ //Returns if word is dropped or not [Setting and checking if the word has dropped must be synchonized, else case: word caught and then destroyed, then anim. scans...will result in counting a miss CONFIRMED]
                     s.missedWord();
@@ -36,7 +34,7 @@ public class Animator extends Thread{
             }                        
         }
 
-        //TODO: Syncronize this
+        //TODO: Syncronize this (Because if two words both drop at the same time we have a race condition)
         if(Tracker.wordsLeft.get() >= WordApp.noWords && Tracker.live){
             wr.resetWord();
             this.run();       
