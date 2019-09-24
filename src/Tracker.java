@@ -1,4 +1,5 @@
 import javax.swing.JOptionPane;
+import java.util.concurrent.atomic.AtomicInteger;
 
 //Seperated from the 'score' class so as to comply with MVC design
 
@@ -11,7 +12,9 @@ public class Tracker extends Thread{
     private int latestMissedWords;
 	private int latestCaughtWords;
     private int latestGameScore;
-    private int wordsLeft;
+    //private int wordsLeft;
+
+    public static AtomicInteger wordsLeft; //MOVE TO TRACKER
 
     private int framesPerSec;
     private long lastTime;
@@ -42,7 +45,7 @@ public class Tracker extends Thread{
             latestMissedWords = s.getMissed();
 	        latestCaughtWords = s.getCaught();
             latestGameScore = s.getScore();
-            wordsLeft = WordApp.wordsLeft.get();
+            //wordsLeft = WordApp.wordsLeft.get();
 
             //Update based on the coherent data
             if(lastMissedWords < latestMissedWords){
@@ -64,7 +67,7 @@ public class Tracker extends Thread{
                 w.repaint();
             }
 
-            if (wordsLeft == 0){
+            if (wordsLeft.get() == 0){
                 System.out.println("All words finnished falling");
                 showCompletedMessage = true;
                 break;
@@ -77,13 +80,13 @@ public class Tracker extends Thread{
 
         }
         w.repaint();
+        WordApp.live = false;
         //End of game procedure... Was 'END' button pressed or did all words fall?
         if(showCompletedMessage){
             JOptionPane.showMessageDialog(null, "Nice Work!\nMissed Words: " + lastMissedWords + "\nCaught Words: " + lastCaughtWords + "\nScore: " + lastGameScore);
         }else{
             System.out.println("Game ended by user!");
         }
-        WordApp.live = false;
         System.out.println("Tracker killed");
 
     }

@@ -13,7 +13,7 @@ public class Animator extends Thread{
         this.w = w;
         this.wr = wr;
         this.s = s;
-        speedDivisor = 10;
+        speedDivisor = 100;
         //repaintBusy = new AtomicBoolean(false);
 
         System.out.println("Animator created");
@@ -52,15 +52,16 @@ public class Animator extends Thread{
 
         if(wr.enabled()){
             s.missedWord();
-            WordApp.wordsLeft.getAndDecrement();
+            Tracker.wordsLeft.getAndDecrement();
         }
 
         //TODO: Syncronize this
-        if(WordApp.wordsLeft.get() >= WordApp.noWords && WordApp.live){
+        if(Tracker.wordsLeft.get() >= WordApp.noWords && WordApp.live){
             wr.resetWord();
             this.run();       
         }else{
             wr.destroy();
+            w.repaint(); //This must be here, because tracker may die before last thread dies at the end of the game...
             System.out.println("Animator killed");
             //Tracker will track when all words destroyed and end the game when nesesseary
         }        

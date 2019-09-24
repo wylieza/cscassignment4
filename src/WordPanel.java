@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -13,6 +15,9 @@ public class WordPanel extends JPanel implements Runnable {
 		private WordRecord[] words;
 		private int noWords;
 		private int maxY;
+
+		static Tracker tracker; //MOVE TO WordPanel
+		static Animator[] animators; //MOVE TO WordPanel
 
 		
 		public void paintComponent(Graphics g) {
@@ -43,6 +48,26 @@ public class WordPanel extends JPanel implements Runnable {
 		
 		public void run() {
 			//add in code to animate this
+			Tracker.wordsLeft = new AtomicInteger(WordApp.totalWords);
+			animators = new Animator[words.length];
+
+			WordApp.score.resetScore(); //Reset for new game
+
+			for (int i=0;i<words.length;i++) {
+				words[i].resetWord(); //Reset for new game
+				animators[i] = new Animator(words[i], this, WordApp.score); //Create animator for each word
+			}
+			
+			tracker = new Tracker(this, WordApp.score); //Create the game tracker
+
+			//Start up threads
+			WordApp.live = true; //Must be set to true before starting threads
+
+			tracker.start(); //Start the game tracker
+			for (int i=0;i<noWords;i++) {
+				words[i].setEnabled(true); //Enable guessing of word
+				animators[i].start(); //Start the word animation
+			}
 		}
 
 	}

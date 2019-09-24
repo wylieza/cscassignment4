@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.*;
 //model is separate from the view.
-import java.util.concurrent.atomic.AtomicInteger;
+
 
 public class WordApp {
 //shared variables
@@ -23,8 +23,6 @@ public class WordApp {
 
 	static WordDictionary dict = new WordDictionary(); //use default dictionary, to read from file eventually
 
-	static Tracker tracker;
-	static Animator[] animators;
 	static WordRecord[] words;
 	static volatile boolean done;  //must be volatile
 	static 	Score score = new Score();
@@ -33,7 +31,7 @@ public class WordApp {
 	/*Running state is activated after the start button is pressed
 	* Running state is deactivated when END button is pressed?
 	*/
-	static AtomicInteger wordsLeft;
+	
 
 	static WordPanel w;
 
@@ -83,7 +81,7 @@ public class WordApp {
 				for (int i = 0; i < words.length && live; i++){
 					if (words[i].matchWord(text)){
 						score.caughtWord(text.length());
-						if(wordsLeft.getAndDecrement() <= noWords){
+						if(Tracker.wordsLeft.getAndDecrement() <= noWords){
 							words[i].destroy();
 						}
 						break; //Only match the first if two of same on display
@@ -114,24 +112,8 @@ public class WordApp {
 				System.out.println("Start Button Pressed");							//testing START
 				if(!live){
 
-					//Reinit state
-					score.resetScore();
-					wordsLeft = new AtomicInteger(totalWords);
-
-					for (int i=0;i<words.length;i++) {
-						words[i].resetWord();
-						animators[i] = new Animator(words[i], w, score);
-					}
+					(new Thread(w)).start();			
 					
-					tracker = new Tracker(w, score);
-
-					//Start up threads
-					live = true; //Must be set to true before starting threads
-					tracker.start();
-					for (int i=0;i<noWords;i++) {
-						words[i].setEnabled(true); //Enable guessing of word
-						animators[i].start();
-					}
 				}
 
 				textEntry.requestFocus();  //return focus to the text entry field
@@ -232,7 +214,7 @@ public static String[] getDictFromFile(String filename) {
 		WordRecord.dict=dict; //set the class dictionary for the words.
 		
 		words = new WordRecord[noWords];  //shared array of current words
-		animators = new Animator[noWords];
+		
 		
 		//[snip]
 		live = false; //Set the game to not running until start pressed
