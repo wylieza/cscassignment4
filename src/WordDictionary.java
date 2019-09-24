@@ -1,5 +1,3 @@
-//Class is a dictionary, allows a word to be picked at random.
-
 public class WordDictionary {
 	int size;
 	static String [] theDict= {"litchi","banana","apple","mango","pear","orange","strawberry",
@@ -12,13 +10,11 @@ public class WordDictionary {
 		theDict = new String[size];
 		for (int i=0;i<size;i++) {
 			theDict[i] = tmp[i];
-		}
-		
+		}		
 	}
 	
 	WordDictionary() {
-		size=theDict.length;
-		
+		size=theDict.length;		
 	}
 	
 	public synchronized String getNewWord() {

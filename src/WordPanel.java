@@ -16,8 +16,8 @@ public class WordPanel extends JPanel implements Runnable {
 		private int noWords;
 		private int maxY;
 
-		static Tracker tracker; //MOVE TO WordPanel
-		static Animator[] animators; //MOVE TO WordPanel
+		static Tracker tracker;
+		static Animator[] animators;
 
 		
 		public void paintComponent(Graphics g) {
@@ -33,21 +33,20 @@ public class WordPanel extends JPanel implements Runnable {
 		   //animation must be added 
 		    for (int i=0;i<noWords;i++){	    	
 		    	//g.drawString(words[i].getWord(),words[i].getX(),words[i].getY());	
-				g.drawString(words[i].getWord(),words[i].getX(),words[i].getY());  //y-offset for skeleton so that you can see the words	
+				g.drawString(words[i].getWord(),words[i].getX(),words[i].getY()-10+30);  //y-offset for skeleton so that you can see the words	
 
 		    }
 		   
 		  }
 		
 		WordPanel(WordRecord[] words, int maxY) {
-			this.words=words; //will this work?
+			this.words=words;
 			noWords = words.length;
 			done=false;
 			this.maxY=maxY;		
 		}
 		
 		public void run() {
-			//add in code to animate this
 			Tracker.wordsLeft = new AtomicInteger(WordApp.totalWords);
 			animators = new Animator[words.length];
 
@@ -61,7 +60,7 @@ public class WordPanel extends JPanel implements Runnable {
 			tracker = new Tracker(this, WordApp.score); //Create the game tracker
 
 			//Start up threads
-			WordApp.live = true; //Must be set to true before starting threads
+			Tracker.live = true; //Must be set to true before starting threads
 
 			tracker.start(); //Start the game tracker
 			for (int i=0;i<noWords;i++) {

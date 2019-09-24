@@ -9,7 +9,6 @@ import java.io.IOException;
 
 import java.util.Scanner;
 import java.util.concurrent.*;
-//model is separate from the view.
 
 
 public class WordApp {
@@ -26,12 +25,7 @@ public class WordApp {
 	static WordRecord[] words;
 	static volatile boolean done;  //must be volatile
 	static 	Score score = new Score();
-
-	static volatile boolean live; //Boolean to say if game is in 'running' state
-	/*Running state is activated after the start button is pressed
-	* Running state is deactivated when END button is pressed?
-	*/
-	
+	static ProcessAction action;	
 
 	static WordPanel w;
 
@@ -78,18 +72,8 @@ public class WordApp {
 			public void actionPerformed(ActionEvent evt) {
 				String text = textEntry.getText();
 				//[snip]
-				for (int i = 0; i < words.length && live; i++){
-					if (words[i].matchWord(text)){
-						score.caughtWord(text.length());
-						if(Tracker.wordsLeft.getAndDecrement() <= noWords){
-							words[i].destroy();
-						}
-						break; //Only match the first if two of same on display
-					}
-				}
+				action.guess(text);														//GUESS
 
-				System.out.println(text); 															//Testing
-				
 				textEntry.setText("");
 				textEntry.requestFocus();
 			}
@@ -109,16 +93,15 @@ public class WordApp {
 			public void actionPerformed(ActionEvent e)
 			{
 				//[snip]
-				System.out.println("Start Button Pressed");							//testing START
-				if(!live){
-
-					(new Thread(w)).start();			
-					
+				System.out.println("Start Button Pressed");							//START
+				if(!Tracker.live){
+					(new Thread(w)).start();		
 				}
 
 				textEntry.requestFocus();  //return focus to the text entry field
 			}
 			});
+
 		JButton endB = new JButton("End");;
 			
 				// add the listener to the jbutton to handle the "pressed" event
@@ -127,12 +110,7 @@ public class WordApp {
 				public void actionPerformed(ActionEvent e)
 				{
 					//[snip]
-					if(live){
-						live = false;
-						System.out.println("End button pressed, game ended"); 	
-					}else{
-						System.out.println("No game to end!");
-					}
+					action.endAction();												//END
 				}
 				});
 
@@ -143,8 +121,7 @@ public class WordApp {
 		{
 		public void actionPerformed(ActionEvent e)
 		{			
-			System.out.println("End button pressed, 'QUIT the game'");
-			System.exit(0);
+			action.quitAction();														//QUIT
 		}
 		});
 		
@@ -214,10 +191,12 @@ public static String[] getDictFromFile(String filename) {
 		WordRecord.dict=dict; //set the class dictionary for the words.
 		
 		words = new WordRecord[noWords];  //shared array of current words
+
+		action = new ProcessAction(w, words, score);
 		
 		
 		//[snip]
-		live = false; //Set the game to not running until start pressed
+		Tracker.live = false; //Set the game to not running until start pressed
 
 		setupGUI(frameX, frameY, yLimit);  
 		//Start WordPanel thread - for redrawing animation

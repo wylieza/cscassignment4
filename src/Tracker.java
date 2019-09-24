@@ -12,7 +12,11 @@ public class Tracker extends Thread{
     private int latestMissedWords;
 	private int latestCaughtWords;
     private int latestGameScore;
-    //private int wordsLeft;
+
+    static volatile boolean live; //Boolean to say if game is in 'running' state //MOVE TO TRACKER
+	/*Running state is activated after the start button is pressed
+	* Running state is deactivated when END button is pressed?
+	*/
 
     public static AtomicInteger wordsLeft; //MOVE TO TRACKER
 
@@ -39,15 +43,21 @@ public class Tracker extends Thread{
     }
 
     public void run(){
-        while(WordApp.live){
+        while(live){
 
             //Synchonize these lines:
             latestMissedWords = s.getMissed();
 	        latestCaughtWords = s.getCaught();
             latestGameScore = s.getScore();
-            //wordsLeft = WordApp.wordsLeft.get();
 
             //Update based on the coherent data
+
+            if (wordsLeft.get() == 0){ //Check if the number of words left is zero
+                System.out.println("All words finnished falling");
+                showCompletedMessage = true;
+                //Dont break here, but allow one last sweep through to perform final updates
+            }
+
             if(lastMissedWords < latestMissedWords){
                 lastMissedWords = latestMissedWords; //This must happend before the update and then the update must happen on the local variable so we don't 'miss' a score
                 WordApp.updateMissed("Missed:" + lastMissedWords + "    ");
@@ -67,9 +77,8 @@ public class Tracker extends Thread{
                 w.repaint();
             }
 
-            if (wordsLeft.get() == 0){
-                System.out.println("All words finnished falling");
-                showCompletedMessage = true;
+            if(showCompletedMessage){
+                //After the last sweep of updates, break to display completed message
                 break;
             }
 
@@ -80,7 +89,7 @@ public class Tracker extends Thread{
 
         }
         w.repaint();
-        WordApp.live = false;
+        live = false;
         //End of game procedure... Was 'END' button pressed or did all words fall?
         if(showCompletedMessage){
             JOptionPane.showMessageDialog(null, "Nice Work!\nMissed Words: " + lastMissedWords + "\nCaught Words: " + lastCaughtWords + "\nScore: " + lastGameScore);

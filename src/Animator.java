@@ -13,7 +13,7 @@ public class Animator extends Thread{
         this.w = w;
         this.wr = wr;
         this.s = s;
-        speedDivisor = 100;
+        speedDivisor = 10;
         //repaintBusy = new AtomicBoolean(false);
 
         System.out.println("Animator created");
@@ -23,40 +23,27 @@ public class Animator extends Thread{
         
         baseTime = System.currentTimeMillis();
         while(!wr.dropped() && wr.enabled()){
-            if(!WordApp.live){
+            if(!Tracker.live){
                 break; //Game ended by user, kill thread
             }
 
-            
             if(wr.getSpeed()/speedDivisor <= (System.currentTimeMillis()-baseTime)){ //use 20 for good speed
                 baseTime = System.currentTimeMillis();
-                wr.setY(wr.getY()+1);
-                //if(repaintBusy.compareAndSet(false, true)){
-                //w.repaint(); //Consider doing this in the track (like an FPS vibe?) -MUCH BETTER!!!!
-                //    repaintBusy.set(false);
-                //}
-                
-            }            
-
-            /*
-            try{
-                wr.setY(wr.getY()+1);
-                w.repaint();
-                sleep(wr.getSpeed()/(speedDivisor));
-            }catch(Exception e){
-                System.out.println("Sleep exception: " + e.toString());
-            }
-            */
-            
+                if(wr.setY(wr.getY()+1)){ //Returns if word is dropped or not
+                    s.missedWord();
+                    Tracker.wordsLeft.getAndDecrement();
+                    //break; //If the word was dropped we must break - NOT Actually nesessary?
+                }                
+            }                        
         }
 
-        if(wr.enabled()){
-            s.missedWord();
-            Tracker.wordsLeft.getAndDecrement();
-        }
+        //if(wr.enabled()){
+        //    s.missedWord();
+        //    Tracker.wordsLeft.getAndDecrement();
+        //}
 
         //TODO: Syncronize this
-        if(Tracker.wordsLeft.get() >= WordApp.noWords && WordApp.live){
+        if(Tracker.wordsLeft.get() >= WordApp.noWords && Tracker.live){
             wr.resetWord();
             this.run();       
         }else{
