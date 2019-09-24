@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
 public class WordPanel extends JPanel implements Runnable {
 		public static volatile boolean done;
@@ -44,6 +45,10 @@ public class WordPanel extends JPanel implements Runnable {
 			noWords = words.length;
 			done=false;
 			this.maxY=maxY;		
+		}
+
+		public void displayDialog(String message){
+			JOptionPane.showMessageDialog(null, message);
 		}
 		
 		public void run() {

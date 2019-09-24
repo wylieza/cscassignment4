@@ -95,7 +95,7 @@ public class Tracker extends Thread{
         live = false;
         //End of game procedure... Was 'END' button pressed or did all words fall?
         if(showCompletedMessage){
-            JOptionPane.showMessageDialog(null, "Nice Work!\nMissed Words: " + lastMissedWords + "\nCaught Words: " + lastCaughtWords + "\nScore: " + lastGameScore);
+            w.displayDialog("Nice Work!\nMissed Words: " + lastMissedWords + "\nCaught Words: " + lastCaughtWords + "\nScore: " + lastGameScore);
         }else{
             System.out.println("Game ended by user!");
         }
