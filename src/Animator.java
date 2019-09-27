@@ -23,7 +23,7 @@ public class Animator extends Thread{
                 
         baseTime = System.currentTimeMillis();
         while(!wr.dropped()){
-            if(!Tracker.live){
+            if(!Score.live){
                 break; //Game ended by user, kill thread
             }
 
@@ -31,15 +31,15 @@ public class Animator extends Thread{
                 baseTime = System.currentTimeMillis();
                 if(wr.setY(wr.getY()+1)){ //Returns if word is dropped or not [Setting and checking if the word has dropped must be synchonized, else case: word caught and then destroyed, then anim. scans...will result in counting a miss CONFIRMED]
                     s.missedWord();
-                    Tracker.wordsLeft.getAndDecrement();
+                    Score.wordsLeft.getAndDecrement();
                 }                
             }                        
         }
 
         //TODO: Syncronize this (Because if two words both drop at the same time we have a race condition)
         boolean resetWord = false;
-        synchronized(Tracker.wordsLeft){
-            if(Tracker.wordsLeft.get() >= WordApp.noWords && Tracker.live){
+        synchronized(Score.wordsLeft){
+            if(Score.wordsLeft.get() >= WordApp.noWords && Score.live){
                 wr.resetWord();
                 resetWord = true;
             }

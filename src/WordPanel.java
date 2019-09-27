@@ -5,8 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.CountDownLatch;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
@@ -52,7 +50,7 @@ public class WordPanel extends JPanel implements Runnable {
 		}
 		
 		public void run() {
-			Tracker.wordsLeft = new AtomicInteger(WordApp.totalWords);
+			Score.wordsLeft = new AtomicInteger(WordApp.totalWords);
 			animators = new Animator[words.length];
 
 			WordApp.score.resetScore(); //Reset for new game
@@ -65,7 +63,7 @@ public class WordPanel extends JPanel implements Runnable {
 			tracker = new Tracker(this, WordApp.score); //Create the game tracker
 
 			//Start up threads
-			Tracker.live = true; //Must be set to true before starting threads
+			Score.live = true; //Must be set to true before starting threads
 
 			tracker.start(); //Start the game tracker
 			for (int i=0;i<noWords;i++) {

@@ -94,7 +94,7 @@ public class WordApp {
 			{
 				//[snip]
 				System.out.println("Start Button Pressed");							//START
-				if(!Tracker.live){
+				if(!Score.live){
 					(new Thread(w)).start();		
 				}
 
@@ -196,7 +196,7 @@ public static String[] getDictFromFile(String filename) {
 		
 		
 		//[snip]
-		Tracker.live = false; //Set the game to not running until start pressed
+		Score.live = false; //Set the game to not running until start pressed
 
 		setupGUI(frameX, frameY, yLimit);  
 		//Start WordPanel thread - for redrawing animation

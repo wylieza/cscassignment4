@@ -12,11 +12,11 @@ public class Tracker extends Thread{
 	private int latestCaughtWords;
     private int latestGameScore;
 
-    static volatile boolean live; //Boolean to say if game is in 'running' state //MOVE TO TRACKER
+ 
 	/*Running state is activated after the start button is pressed
 	* Running state is deactivated when END button is pressed?	*/
 
-    public static AtomicInteger wordsLeft; //MOVE TO TRACKER
+
     private int lastWordsLeft;
 
     private int framesPerSec;
@@ -42,15 +42,15 @@ public class Tracker extends Thread{
     }
 
     public void run(){
-        while(live){
+        while(Score.live){
 
             //Synchonize these lines:
             do { //Loop through until sure of a coherent set of results
-                lastWordsLeft = wordsLeft.get();
+                lastWordsLeft = Score.wordsLeft.get();
                 latestMissedWords = s.getMissed();
                 latestCaughtWords = s.getCaught();
                 latestGameScore = s.getScore();
-            }while(wordsLeft.get() != lastWordsLeft);
+            }while(Score.wordsLeft.get() != lastWordsLeft);
 
             //Update based on the coherent data
 
@@ -91,7 +91,7 @@ public class Tracker extends Thread{
 
         }
         w.repaint();
-        live = false;
+        Score.live = false;
         //End of game procedure... Was 'END' button pressed or did all words fall?
         if(showCompletedMessage){
             w.displayDialog("Nice Work!\nMissed Words: " + lastMissedWords + "\nCaught Words: " + lastCaughtWords + "\nScore: " + lastGameScore);
