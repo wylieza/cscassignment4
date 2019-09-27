@@ -36,12 +36,14 @@ public class WordRecord {
 	}
 
 	public synchronized boolean setY(int y) { //Modified
+		this.y=y;
 		if (y>maxY) {
 			y=maxY;
 			dropped=true;
+		}else{
+			return false;
 		}
-		this.y=y;
-		return dropped();
+		return dropped;
 	}
 	
 	public synchronized  void setX(int x) {

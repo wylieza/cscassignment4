@@ -13,7 +13,7 @@ public class Animator extends Thread{
         this.w = w;
         this.wr = wr;
         this.s = s;
-        speedDivisor = 100;
+        speedDivisor = 30;
 
         System.out.println("Animator created");
     }

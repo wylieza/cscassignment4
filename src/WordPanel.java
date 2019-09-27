@@ -9,6 +9,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class WordPanel extends JPanel implements Runnable {
 		public static volatile boolean done;
 		private WordRecord[] words;

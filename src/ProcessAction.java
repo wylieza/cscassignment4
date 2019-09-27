@@ -30,12 +30,13 @@ public class ProcessAction{
         System.out.println("Guess: " + text);
         if(Score.live){ //Guess can only be processed while if the game is live
             for (int i = 0; i < words.length; i++){
-                if (words[i].matchWord(text)){ //Checks if word is not dropped and if text matches -> resets the word if matched [NEED TO prevent guessing until check we want a new word]
+                if (words[i].matchWord(text)){ //Checks if word is not dropped and if text matches -> resets the word if matched
                     score.caughtWord(text.length()); //Increase the score
+                    //No locking is required below
                     if(Score.wordsLeft.getAndDecrement() <= words.length){ //Only generate another word if the wordsLeft to fall exceeds the current number of falling words
                         words[i].destroy();
-                    }
-                    break; //Only match the first occurance, so exit the loop
+                    }                    
+                    break; //Only match for the first occurance, exit the loop
                 }
             }
         }

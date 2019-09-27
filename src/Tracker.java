@@ -12,11 +12,6 @@ public class Tracker extends Thread{
 	private int latestCaughtWords;
     private int latestGameScore;
 
- 
-	/*Running state is activated after the start button is pressed
-	* Running state is deactivated when END button is pressed?	*/
-
-
     private int lastWordsLeft;
 
     private int framesPerSec;
@@ -32,7 +27,7 @@ public class Tracker extends Thread{
         this.s = s;
         showCompletedMessage = false;
 
-        framesPerSec = 30;
+        framesPerSec = 60;
         lastTime = System.currentTimeMillis();
 
         //Set last values to force update after game restart event
@@ -44,7 +39,7 @@ public class Tracker extends Thread{
     public void run(){
         while(Score.live){
 
-            //Synchonize these lines:
+            //Gather coherent data
             do { //Loop through until sure of a coherent set of results
                 lastWordsLeft = Score.wordsLeft.get();
                 latestMissedWords = s.getMissed();
@@ -53,7 +48,6 @@ public class Tracker extends Thread{
             }while(Score.wordsLeft.get() != lastWordsLeft);
 
             //Update based on the coherent data
-
             if (lastWordsLeft <= 0){ //Check if the number of words left is zero
                 System.out.println("All words finnished falling");
                 showCompletedMessage = true;
