@@ -5,16 +5,14 @@ public class Score {
 	private int caughtWords;
 	private int gameScore;
 
-	public static AtomicInteger wordsLeft; //MOVE TO TRACKER - NOW MOVE TO SCORE
-	static volatile boolean live; //Boolean to say if game is in 'running' state //MOVE TO TRACKER - NOW MOVE TO SCORE
+	public static AtomicInteger wordsLeft;
+	static volatile boolean live; //Boolean to say if game is in 'running' state
 	
 	Score() { 
 		missedWords=0;
 		caughtWords=0;
 		gameScore=0;
 	}
-		
-	// all getters and setters must be synchronized
 	
 	public synchronized int getMissed() {
 		return missedWords;

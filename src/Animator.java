@@ -14,8 +14,6 @@ public class Animator extends Thread{
         this.wr = wr;
         this.s = s;
         speedDivisor = 30;
-
-        System.out.println("Animator created");
     }
 
     public void run(){
@@ -29,14 +27,14 @@ public class Animator extends Thread{
 
             if(wr.getSpeed()/speedDivisor <= (System.currentTimeMillis()-baseTime)){ //Check if it is time to increment y position
                 baseTime = System.currentTimeMillis();
-                if(wr.setY(wr.getY()+1)){ //Returns if word is dropped or not [Setting and checking if the word has dropped must be synchonized, else case: word caught and then destroyed, then anim. scans...will result in counting a miss CONFIRMED]
+                if(wr.setY(wr.getY()+1)){ //Returns if word is dropped or not
                     s.missedWord();
                     Score.wordsLeft.getAndDecrement();
                 }                
             }                        
         }
 
-        //TODO: Syncronize this (Because if two words both drop at the same time we have a race condition)
+        //Syncronized because if two words both drop at the same time we could have a race condition
         boolean resetWord = false;
         synchronized(Score.wordsLeft){
             if(Score.wordsLeft.get() >= WordApp.noWords && Score.live){
@@ -48,9 +46,7 @@ public class Animator extends Thread{
                 this.run();              
         }else{
             wr.destroy();
-            w.repaint(); //This must be here, because tracker may die before last thread dies at the end of the game...
-            System.out.println("Animator killed");
-            //Tracker will track when all words destroyed and end the game when nesesseary
+            w.repaint();
         }
 
     }

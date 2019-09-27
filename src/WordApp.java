@@ -12,7 +12,6 @@ import java.util.concurrent.*;
 
 
 public class WordApp {
-//shared variables
 	static int noWords=4;
 	static int totalWords;
 
@@ -20,7 +19,7 @@ public class WordApp {
 	static int frameY=600;
 	static int yLimit=480;
 
-	static WordDictionary dict = new WordDictionary(); //use default dictionary, to read from file eventually
+	static WordDictionary dict = new WordDictionary();
 
 	static WordRecord[] words;
 	static volatile boolean done;  //must be volatile
@@ -59,20 +58,14 @@ public class WordApp {
 		scr =new JLabel("Score:" + score.getScore()+ "    ");    
 		txt.add(caught);
 		txt.add(missed);
-		txt.add(scr);
-		
-	
-		//[snip]
-		System.out.println("GUI setup run...");
-		
+		txt.add(scr);		
 
 		final JTextField textEntry = new JTextField("",20);
 		textEntry.addActionListener(new ActionListener()
 			{
 			public void actionPerformed(ActionEvent evt) {
 				String text = textEntry.getText();
-				//[snip]
-				action.guess(text);														//GUESS
+				action.guess(text);
 
 				textEntry.setText("");
 				textEntry.requestFocus();
@@ -92,8 +85,6 @@ public class WordApp {
 			{
 			public void actionPerformed(ActionEvent e)
 			{
-				//[snip]
-				System.out.println("Start Button Pressed");							//START
 				if(!Score.live){
 					(new Thread(w)).start();		
 				}
@@ -109,8 +100,7 @@ public class WordApp {
 				{
 				public void actionPerformed(ActionEvent e)
 				{
-					//[snip]
-					action.endAction();												//END
+					action.endAction();
 				}
 				});
 
@@ -121,7 +111,7 @@ public class WordApp {
 		{
 		public void actionPerformed(ActionEvent e)
 		{			
-			action.quitAction();														//QUIT
+			action.quitAction();
 		}
 		});
 		
@@ -146,12 +136,10 @@ public static String[] getDictFromFile(String filename) {
 		try {
 			Scanner dictReader = new Scanner(new FileInputStream(filename));
 			int dictLength = dictReader.nextInt();
-			//System.out.println("read '" + dictLength+"'");
 
 			dictStr=new String[dictLength];
 			for (int i=0;i<dictLength;i++) {
 				dictStr[i]=new String(dictReader.next());
-				//System.out.println(i+ " read '" + dictStr[i]+"'"); //for checking
 			}
 			dictReader.close();
 		} catch (IOException e) {
@@ -194,8 +182,6 @@ public static String[] getDictFromFile(String filename) {
 
 		action = new ProcessAction(w, words, score);
 		
-		
-		//[snip]
 		Score.live = false; //Set the game to not running until start pressed
 
 		setupGUI(frameX, frameY, yLimit);  
@@ -206,6 +192,7 @@ public static String[] getDictFromFile(String filename) {
 
 		for (int i=0;i<noWords;i++) {
 			words[i]=new WordRecord(dict.getNewWord(),i*x_inc,yLimit);
+			words[i].destroy();
 		}
 			
 
