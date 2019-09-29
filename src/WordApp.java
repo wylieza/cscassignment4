@@ -161,6 +161,9 @@ public static String[] getDictFromFile(String filename) {
 		WordApp.scr.setText(update);
 	}
 
+	/**
+	 * @param args The arguments for configuring the game
+	 */
 	public static void main(String[] args) {
 		
 		//deal with command line arguments
